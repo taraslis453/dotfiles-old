@@ -105,9 +105,9 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1"
+set $ws1 "1: Browser"
 set $ws2 "2"
-set $ws3 "3: Browser"
+set $ws3 "3"
 set $ws4 "4"
 set $ws5 "5"
 set $ws6 "6"
@@ -147,7 +147,7 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
-mode "exit: [l]ogout, [r]eboot, [s]hutdown, sus[p]end" {
+mode "exit: [l]ogout, [r]eboot, [s]hutdown, [p]suspend" {
 
   bindsym l exec i3-msg exit
 
@@ -163,7 +163,7 @@ mode "exit: [l]ogout, [r]eboot, [s]hutdown, sus[p]end" {
 
 }
 
-bindsym $mod+x mode "exit: [l]ogout, [r]eboot, [s]hutdown"
+bindsym $mod+x mode "exit: [l]ogout, [r]eboot, [s]hutdown, [p]suspend"
 # resize window (you can also use the mouse for that)
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
@@ -199,7 +199,7 @@ bar {
 # monitors setting
 exec_always xrandr --output LVDS-1-1 --mode 1366x768 --pos 0x113 --rotate normal --output VGA-1-1 --primary --mode 1680x1050 --pos 1366x0 --rotate normal --output HDMI-1-1 --off --output DP-1-1 --off
 
-assign [class="Firefox"] $ws3
+assign [class="Firefox"] $ws1
 assign [class='Gnome-terminal'] $ws8
 assign [class="TelegramDesktop"] $ws9
 exec firefox
