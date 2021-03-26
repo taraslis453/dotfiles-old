@@ -1,6 +1,5 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-
 # Path to your oh-my-zsh installation.
 export ZSH="/home/taras/.oh-my-zsh"
 export KEYTIMEOUT=1
@@ -71,3 +70,4 @@ source $ZSH/oh-my-zsh.sh
 alias zshc="nvim ~/.zshrc"
 alias nvimi='nvim ~/.config/nvim/init.vim'
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+alias cap='zsh ~/tab.zsh'
