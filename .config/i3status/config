@@ -7,11 +7,19 @@ general {
         color_degraded = '#ebcb8b'
         color_bad = '#ba5e57'
 }
+order += "memory"
 order += "cpu_temperature 0"
 order += "disk /"
 order += "disk /home"
 order += "volume master"
 order += "tztime local"
+
+memory {
+      memory_used_method = classical
+      format = "<span background='#b3555e'>%used | %available</span>"
+      threshold_degraded = "1G"
+      format_degraded = "MEMORY < %available"
+}
 
 cpu_temperature 0 {
         format = "<span background='#bf616a'>  %degrees °C </span>"
