@@ -225,7 +225,7 @@ client.placeholder          $bg-color $bg-color $fg-color $bg-color $bg-color
 client.background           $bg-color
 # monitors setting
 exec_always xrandr --output LVDS-1-1 --mode 1366x768 --pos 0x113 --rotate normal --output VGA-1-1 --primary --mode 1680x1050 --pos 1366x0 --rotate normal --output HDMI-1-1 --off --output DP-1-1 --off && feh --bg-fill /home/taras/Downloads/wallpaper.jpg 
-
+exec_always compton
 assign [class="Firefox"] $ws3
 assign [class="TelegramDesktop"] $ws9
 for_window [class=Lxappearance] floating enable
