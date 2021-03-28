@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:monospace 8
+font pango:System San Francisco Display 13
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -29,6 +29,7 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
+
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -47,7 +48,7 @@ bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run
+bindsym $mod+d exec rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 3 -font 'System San Francisco Display 10'
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -78,7 +79,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+semicolumn split h
+bindsym $mod+semicolon split h
 
 # split in vertical orientation
 bindsym $mod+v split v
@@ -92,10 +93,10 @@ bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
+bindsym $mod+space floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+bindsym $mod+Shift+space focus mode_toggle
 
 # focus the parent container
 bindsym $mod+a focus parent
@@ -107,13 +108,13 @@ bindsym $mod+a focus parent
 # We use variables to avoid repeating the names in multiple places.
 set $ws1 "1"
 set $ws2 "2"
-set $ws3 "3: Browser"
+set $ws3 "3: Browser "
 set $ws4 "4"
 set $ws5 "5"
 set $ws6 "6"
 set $ws7 "7"
 set $ws8 "8: Terminals "
-set $ws9 "9: Telegram "
+set $ws9 "9: Telegram "
 set $ws10 "10: Music ﱘ"
 
 # switch to workspace
@@ -172,15 +173,15 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym h resize shrink width 10 px or 10 ppt
-        bindsym j resize grow height 10 px or 10 ppt
-        bindsym k resize shrink height 10 px or 10 ppt
-        bindsym l resize grow width 10 px or 10 ppt
+        bindsym h resize shrink width 5 px or 5 ppt
+        bindsym j resize grow height 5 px or 5 ppt
+        bindsym k resize shrink height 5 px or 5 ppt
+        bindsym l resize grow width 5 px or 5 ppt
 
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+        bindsym Left resize shrink width 5 px or 5 ppt
+        bindsym Down resize grow height 5 px or 5 ppt
+        bindsym Up resize shrink height 5 px or 5 ppt
+        bindsym Right resize grow width 5 px or 5 ppt
 
         # back to normal: Enter or Escape or $mod+r
         bindsym Return mode "default"
@@ -191,17 +192,43 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 bindsym $mod+shift+x exec i3lock
 
+
+set_from_resource $fg-color foreground
+set_from_resource $bg-color background
+set_from_resource $black color0
+set_from_resource $red color1
+set_from_resource $yellow color3
+
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
+#
 bar {
-        status_command i3status
+    colors {
+        background $bg-color
+        statusline $bg-color
+        separator $black
+        # colour of border, background, and text
+        focused_workspace       $bg-color $red $fg-color
+        active_workspace        $bg-color $bg-color $fg-color
+        inactive_workspace      $bg-color $bg-color $fg-color
+       urgent_workspace       $bg-color $yellow $bg-color
+      }
+    status_command i3status
 }
+# window colors
+#                       border              background         text                 indicator
+client.focused              $red $bg-color $fg-color $red $fg-color
+client.focused_inactive     $bg-color $bg-color $fg-color $bg-color $bg-color
+client.unfocused            $bg-color $bg-color $fg-color $bg-color $bg-color
+client.urgent               $bg-color $bg-color $fg-color $bg-color $bg-color
+client.placeholder          $bg-color $bg-color $fg-color $bg-color $bg-color
+client.background           $bg-color
 # monitors setting
-exec_always xrandr --output LVDS-1-1 --mode 1366x768 --pos 0x113 --rotate normal --output VGA-1-1 --primary --mode 1680x1050 --pos 1366x0 --rotate normal --output HDMI-1-1 --off --output DP-1-1 --off
+exec_always xrandr --output LVDS-1-1 --mode 1366x768 --pos 0x113 --rotate normal --output VGA-1-1 --primary --mode 1680x1050 --pos 1366x0 --rotate normal --output HDMI-1-1 --off --output DP-1-1 --off && feh --bg-fill /home/taras/Downloads/wallpaper.jpg 
 
 assign [class="Firefox"] $ws3
-assign [class='Gnome-terminal'] $ws8
 assign [class="TelegramDesktop"] $ws9
+for_window [class=Lxappearance] floating enable
 exec firefox
 exec telegram-desktop
 set $Lmon LVDS-1-1
@@ -216,12 +243,4 @@ workspace $ws7 output $Rmon
 workspace $ws8 output $Rmon
 workspace $ws9 output $Rmon
 workspace $ws10 output $Rmon
-# i3-msg '[workspace="3"]' move workspace to output left
-# i3-msg '[workspace="8"]' move workspace to output right
-# i3-msg '[workspace="9"]' move workspace to output right
 
-exec_always "setxkbmap -layout us,ru"
-exec_always "setxkbmap -option 'grp:alt_shift_toggle'"
-
-#bg setting
-# exec_always feh --bg-fill /home/taras/Downloads/wallpaper.jpg 
