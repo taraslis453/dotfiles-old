@@ -231,6 +231,9 @@ assign [class="TelegramDesktop"] $ws9
 for_window [class=Lxappearance] floating enable
 exec firefox
 exec telegram-desktop
+# screenshot
+exec --no-startup-id flameshot
+bindsym Print exec "flameshot gui"
 set $Lmon LVDS-1-1
 set $Rmon VGA-1-1
 workspace $ws1 output $Lmon

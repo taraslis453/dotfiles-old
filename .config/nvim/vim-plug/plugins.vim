@@ -1,5 +1,8 @@
 call plug#begin('~/.vim/plugged')
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  " Plug 'pangloss/vim-javascript'
+  Plug 'sheerun/vim-polyglot'
+  " Plug 'mxw/vim-jsx'
   Plug 'scrooloose/nerdtree'
   Plug 'flazz/vim-colorschemes'
   Plug 'HerringtonDarkholme/yats.vim' " TS Syntax
