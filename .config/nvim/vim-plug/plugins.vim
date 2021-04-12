@@ -34,4 +34,5 @@ call plug#begin('~/.vim/plugged')
   Plug 'terryma/vim-expand-region'
   Plug 'airblade/vim-gitgutter'
   Plug 'tpope/vim-fugitive'
+  Plug 'simeji/winresizer'
 call plug#end()
