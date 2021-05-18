@@ -62,7 +62,7 @@ ENABLE_CORRECTION="true"
 plugins=(git zsh-syntax-highlighting zsh-autosuggestions zsh-vi-mode )
 ZVM_CURSOR_STYLE_ENABLED=false
 source $ZSH/oh-my-zsh.sh
-
+source ~/.nvm/nvm.sh
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -71,3 +71,4 @@ alias zshc="nvim ~/.zshrc"
 alias nvimi='nvim ~/.config/nvim/init.vim'
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
 alias cap='zsh ~/tab.zsh'
+alias ys='yarn start'

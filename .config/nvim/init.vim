@@ -79,3 +79,16 @@ map gs <Plug>Sneak_;
 " Cool prompts
  let g:sneak#prompt = '🕵'
  let g:sneak#prompt = '🔎'
+
+nnoremap \ :noh<return>
+" Clear cmd line message
+function! s:empty_message(timer)
+  if mode() ==# 'n'
+    echon ''
+  endif
+endfunction
+
+augroup cmd_msg_cls
+    autocmd!
+    autocmd CmdlineLeave :  call timer_start(2000, funcref('s:empty_message'))
+augroup END
