@@ -182,3 +182,17 @@ nnoremap <silent> K :call <SID>show_documentation()<CR>
 " start from new line on enter in {}
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() 
       \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+let g:coc_global_extensions = [
+  \ 'coc-pairs',
+  \ 'coc-tsserver',
+  \ 'coc-eslint', 
+  \ 'coc-prettier', 
+  \ 'coc-json', 
+  \ 'coc-html',
+  \ 'coc-vimlsp',
+  \ 'coc-styled-components',
+  \ 'coc-css',
+  \ 'coc-lua',
+  \ 'coc-marketplace'
+  \ ]

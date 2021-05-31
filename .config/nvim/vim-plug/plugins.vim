@@ -35,4 +35,5 @@ call plug#begin('~/.vim/plugged')
   Plug 'airblade/vim-gitgutter'
   Plug 'tpope/vim-fugitive'
   Plug 'simeji/winresizer'
+  Plug 'styled-components/vim-styled-components'
 call plug#end()
