@@ -114,7 +114,7 @@ set $ws5 "5"
 set $ws6 "6"
 set $ws7 "7"
 set $ws8 "8: Terminals "
-set $ws9 "9: Telegram "
+set $ws9 "9: Messengers "
 set $ws10 "10: Music ﱘ"
 
 # switch to workspace
@@ -224,13 +224,16 @@ client.urgent               $bg-color $bg-color $fg-color $bg-color $bg-color
 client.placeholder          $bg-color $bg-color $fg-color $bg-color $bg-color
 client.background           $bg-color
 # monitors setting
-exec_always xrandr --output LVDS-1-1 --mode 1366x768 --pos 0x113 --rotate normal --output VGA-1-1 --primary --mode 1680x1050 --pos 1366x0 --rotate normal --output HDMI-1-1 --off --output DP-1-1 --off && feh --bg-fill /home/taras/Downloads/wallpaper.jpg 
+exec_always xrandr --output LVDS-1-1 --mode 1366x768 --pos 0x113 --rotate normal --output VGA-1-1 --primary --mode 1680x1050 --pos 1366x0 --rotate normal --output HDMI-1-1 --off --output DP-1-1 --off && feh --bg-fill /home/taras/Downloads/wallpaper2.jpg 
 exec_always compton
 assign [class="Firefox"] $ws3
+assign [class="Brave-browser"] $ws3
 assign [class="TelegramDesktop"] $ws9
+assign [class="Slack"] $ws9
 for_window [class=Lxappearance] floating enable
-exec firefox
+exec brave
 exec telegram-desktop
+exec slack
 # screenshot
 exec --no-startup-id flameshot
 bindsym Print exec "flameshot gui"
