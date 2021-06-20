@@ -3,6 +3,12 @@
 # Path to your oh-my-zsh installation.
 export ZSH="/home/taras/.oh-my-zsh"
 export KEYTIMEOUT=1
+_MY_NODE="$(which node)"
+if [ -e "${_MY_NODE}" ]; then
+	export NODE_PATH="$HOME/.npm-packages/bin:$HOME/.node_modules/bin"
+    export PATH=$PATH:$NODE_PATH
+fi
+unset _MY_NODE
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
