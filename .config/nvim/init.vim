@@ -1,28 +1,26 @@
 call plug#begin(stdpath('data') . 'vimplug')
     " LSP
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    " Plug 'neovim/nvim-lspconfig'
-    " Plug 'kabouzeid/nvim-lspinstall'
-    " Plug 'glepnir/lspsaga.nvim'
-    " Plug 'hrsh7th/nvim-compe'
+    Plug 'neovim/nvim-lspconfig'
+    Plug 'kabouzeid/nvim-lspinstall'
+    Plug 'glepnir/lspsaga.nvim'
+    Plug 'hrsh7th/nvim-compe'
+    Plug 'hrsh7th/vim-vsnip'
 
     " customization theming
     Plug 'mhinz/vim-startify'
     Plug 'kyazdani42/nvim-web-devicons'  " needed for galaxyline icons
     Plug 'ryanoasis/vim-devicons'
-    Plug 'vim-airline/vim-airline'
-    Plug 'vim-airline/vim-airline-themes'
+    Plug 'glepnir/galaxyline.nvim', { 'branch': 'main' }
     Plug 'romgrk/barbar.nvim'
+    Plug 'kevinhwang91/nvim-bqf'
     Plug 'folke/trouble.nvim'
 
     " syntax
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     Plug 'nvim-treesitter/nvim-treesitter-textobjects'
-    Plug 'morhetz/gruvbox'
+    " Plug 'morhetz/gruvbox'
+    Plug 'sainnhe/gruvbox-material'
     Plug 'ap/vim-css-color'
-    " TODO remove if work without
-    Plug 'styled-components/vim-styled-components'
-    " TODO figure out what is it
     Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
     " text editing, motions
@@ -35,8 +33,9 @@ call plug#begin(stdpath('data') . 'vimplug')
     Plug 'AndrewRadev/tagalong.vim'
     Plug 'andymass/vim-matchup'
     Plug 'psliwka/vim-smoothie'
-    " TODO what is it
-    Plug 'terryma/vim-expand-region'
+    Plug 'cohama/lexima.vim'
+    "prettier
+    Plug 'sbdchd/neoformat'
 
     " git 
     Plug 'airblade/vim-gitgutter'
@@ -53,20 +52,18 @@ call plug#begin(stdpath('data') . 'vimplug')
     " buffers 
     Plug 'christoomey/vim-tmux-navigator'
     Plug 'simeji/winresizer'
+    Plug 'rmagatti/auto-session'
+    Plug 'numToStr/FTerm.nvim'
 
     " etc
-    " TODO remove if doesnt used 
-    Plug 'tpope/vim-repeat'
     Plug 'wakatime/vim-wakatime'
+    Plug 'tpope/vim-repeat'
+    Plug 'liuchengxu/vim-which-key'
 call plug#end()
-
-source $HOME/.config/nvim/plug-config/coc-nvim.vim
-source $HOME/.config/nvim/plug-config/barbar.vim
-
+" TODO snippets, quickfix
 source $HOME/.config/nvim/plug-config/nerd-tree.vim
 source $HOME/.config/nvim/plug-config/vim-closetag.vim
 source $HOME/.config/nvim/plug-config/barbar.vim
-luafile ~/.config/nvim/plug-config/telescope.lua
 
 set number " number of line
 set hidden
@@ -82,6 +79,7 @@ set ignorecase
 set smartcase
 set noswapfile
 set nobackup
+set nowritebackup
 set noerrorbells
 " search when you type
 set incsearch
@@ -91,11 +89,14 @@ set updatetime=50
 set guicursor=
 set t_Co=256 "поддержка 256 цветов в терминале
 let g:mapleader=","
-
+" Give more space for displaying messages.
+set cmdheight=2
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=50
 syntax on "syntax higligth
 
-colorscheme gruvbox
-let g:gruvbox_contrast_dark = 'hard'
+colorscheme gruvbox-material
 " transparent bg
 " hi Normal guibg=NONE ctermbg=NONE
 
@@ -186,13 +187,35 @@ nnoremap <space>fg <cmd>Telescope live_grep<Cr>
 nnoremap <space>fb <cmd>Telescope buffers<Cr>
 nnoremap <space>fh <cmd>Telescope help_tags<Cr>
 
-let g:airline_theme='base16_gruvbox_dark_hard'
+" formatter on save
+augroup fmt
+  autocmd!
+  autocmd BufWritePre * undojoin | Neoformat prettier
+augroup END
 
+" >> Lsp key bindings
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> gi    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> K     <cmd>Lspsaga hover_doc<CR>
+nnoremap <silent> <C-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> [g <cmd>Lspsaga diagnostic_jump_prev<CR>
+nnoremap <silent> ]g <cmd>Lspsaga diagnostic_jump_next<CR>
+nnoremap <silent> gi <cmd>lua vim.lsp_organize_imports()<CR>
+nnoremap <silent> <F2> <cmd>lua vim.lsp.buf.rename()<CR>
+nnoremap <silent> ga    <cmd>Lspsaga code_action<CR>
+xnoremap <silent> ga    <cmd>Lspsaga range_code_action<CR>
+nnoremap <silent> gs    <cmd>Lspsaga signature_help<CR>
+
+" neoformat 
+nnoremap <silent> gp    <cmd>Neoformat prettier<CR>
 lua <<EOF
--- require("lsp")
-require("treesitter")
--- require("statusbar")
--- require("completion")
+  require("lsp")
+  require("treesitter")
+  require("statusbar")
+  require("completion")
+  require("_telescope")
 EOF
 
 lua << EOF
@@ -201,10 +224,70 @@ lua << EOF
     -- or leave it empty to use the default settings
     -- refer to the configuration section below
   }
+  require("trouble").setup{}
+  require'FTerm'.setup({
+      dimensions  = {
+          height = 0.8,
+          width = 0.8,
+          x = 0.5,
+          y = 0.5
+      },
+      border = 'single' -- or 'double'
+  })
+
+  -- Keybinding
+  local map = vim.api.nvim_set_keymap
+  local opts = { noremap = true, silent = true }
+
+  map('n', '<A-i>', '<CMD>lua require("FTerm").toggle()<CR>', opts)
+  map('t', '<A-i>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>', opts)
+
+local gitui = require 'FTerm.terminal':new():setup{
+    cmd = 'gitui',
+    dimensions = {height = 0.9, width = 0.9},
+}
+
+-- Create LazyGit Terminal
+local term = require("FTerm.terminal")
+local lazy = term:new():setup({
+    cmd = "lazygit",
+    dimensions = {
+        height = 0.9,
+        width = 0.9
+    }
+})
+
+ -- Use this to toggle lazygit in a floating terminal
+function _G.__fterm_lazygit()
+    lazy:toggle()
+end
+map('n', '<A-l>', '<CMD>lua _G.__fterm_lazygit()<CR>', opts)
+
 EOF
 
+lua << EOF
+local opts = {
+  log_level = 'info',
+  auto_session_enable_last_session = true,
+  auto_session_root_dir = vim.fn.stdpath('data').."/sessions/",
+  auto_session_enabled = true,
+  auto_save_enabled = true,
+  auto_restore_enabled = true,
+  auto_session_suppress_dirs = nil
+}
+
+require('auto-session').setup(opts)
+EOF
 let g:NERDCustomDelimiters={
 	\ 'javascript': { 'left': '//', 'right': '', 'leftAlt': '{/*', 'rightAlt': '*/}' },
 \}
 
 let NERDSpaceDelims=1
+
+
+nnoremap <leader>xx <cmd>TroubleToggle<cr>
+nnoremap <leader>xw <cmd>TroubleToggle lsp_workspace_diagnostics<cr>
+nnoremap <leader>xd <cmd>TroubleToggle lsp_document_diagnostics<cr>
+nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
+nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
+nnoremap gR <cmd>TroubleToggle lsp_references<cr>
