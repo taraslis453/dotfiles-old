@@ -21,7 +21,6 @@ call plug#begin(stdpath('data') . 'vimplug')
     " Plug 'morhetz/gruvbox'
     Plug 'sainnhe/gruvbox-material'
     Plug 'ap/vim-css-color'
-    Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
     " text editing, motions
     Plug 'https://github.com/easymotion/vim-easymotion.git'
@@ -40,10 +39,9 @@ call plug#begin(stdpath('data') . 'vimplug')
     " git 
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'
-    Plug 'Xuyuanp/nerdtree-git-plugin'
 
     " file navigation
-    Plug 'scrooloose/nerdtree'
+    Plug 'kyazdani42/nvim-tree.lua'
     Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-lua/popup.nvim'  
@@ -61,7 +59,6 @@ call plug#begin(stdpath('data') . 'vimplug')
     Plug 'liuchengxu/vim-which-key'
 call plug#end()
 " TODO snippets, quickfix
-source $HOME/.config/nvim/plug-config/nerd-tree.vim
 source $HOME/.config/nvim/plug-config/vim-closetag.vim
 source $HOME/.config/nvim/plug-config/barbar.vim
 
@@ -112,12 +109,6 @@ set clipboard+=unnamedplus
 " leader space
 " insert blank line shift enter before current line enter 
 nmap <CR> o<Esc>
-" Show folds after exit
-augroup AutoSaveFolds
-autocmd!
-autocmd BufWinLeave,BufLeave,BufWritePost ?* nested silent! mkview!
-autocmd BufWinEnter ?* silent! loadview
-augroup end
 
 "easymotion
 " easy motion on one leader trigger
@@ -176,7 +167,7 @@ nnoremap <Leader>/ :lua require'telescope.builtin'.current_buffer_fuzzy_find{}<C
 nnoremap <Leader>' :lua require'telescope.builtin'.marks{}<CR>
 
 " git files
-" nnoremap <Leader>f :lua require'telescope.builtin'.git_files{}<CR>
+nnoremap <Leader>f :lua require'telescope.builtin'.git_files{}<CR>
 
 " pick color scheme
 nnoremap <Leader>cs :lua require'telescope.builtin'.colorscheme{}<CR>
@@ -263,6 +254,7 @@ function _G.__fterm_lazygit()
 end
 map('n', '<A-l>', '<CMD>lua _G.__fterm_lazygit()<CR>', opts)
 
+
 EOF
 
 lua << EOF
@@ -283,7 +275,51 @@ let g:NERDCustomDelimiters={
 \}
 
 let NERDSpaceDelims=1
+let g:nvim_tree_auto_open = 1
+let g:nvim_tree_lsp_diagnostics = 1
+let g:nvim_tree_hide_dotfiles = 1
+lua <<EOF
+    local tree_cb = require'nvim-tree.config'.nvim_tree_callback
+    vim.g.nvim_tree_bindings = {
+      ["<CR>"] = ":YourVimFunction()<cr>",
+      ["u"] = ":lua require'some_module'.some_function()<cr>",
 
+      -- default mappings
+      ["<CR>"]           = tree_cb("edit"),
+      ["o"]              = tree_cb("edit"),
+      ["<2-LeftMouse>"]  = tree_cb("edit"),
+      ["<2-RightMouse>"] = tree_cb("cd"),
+      ["l"]          = tree_cb("cd"),
+      ["s"]          = tree_cb("vsplit"),
+      ["i"]          = tree_cb("split"),
+      ["t"]          = tree_cb("tabnew"),
+      ["<"]              = tree_cb("prev_sibling"),
+      [">"]              = tree_cb("next_sibling"),
+      ["<BS>"]           = tree_cb("close_node"),
+      ["<S-CR>"]         = tree_cb("close_node"),
+      ["<Tab>"]          = tree_cb("preview"),
+      ["I"]              = tree_cb("toggle_ignored"),
+      ["H"]              = tree_cb("toggle_dotfiles"),
+      ["R"]              = tree_cb("refresh"),
+      ["a"]              = tree_cb("create"),
+      ["d"]              = tree_cb("remove"),
+      ["r"]              = tree_cb("rename"),
+      ["<C-r>"]          = tree_cb("full_rename"),
+      ["x"]              = tree_cb("cut"),
+      ["c"]              = tree_cb("copy"),
+      ["p"]              = tree_cb("paste"),
+      ["y"]              = tree_cb("copy_name"),
+      ["Y"]              = tree_cb("copy_path"),
+      ["gy"]             = tree_cb("copy_absolute_path"),
+      ["[g"]             = tree_cb("prev_git_item"),
+      ["]g"]             = tree_cb("next_git_item"),
+      ["-"]              = tree_cb("dir_up"),
+      ["q"]              = tree_cb("close"),
+    }
+EOF
+nnoremap <C-v> :NvimTreeToggle<CR>
+nnoremap <C-n> :NvimTreeFindFile<CR>
+nnoremap <leader>r :NvimTreeRefresh<CR>
 
 nnoremap <leader>xx <cmd>TroubleToggle<cr>
 nnoremap <leader>xw <cmd>TroubleToggle lsp_workspace_diagnostics<cr>
@@ -291,3 +327,7 @@ nnoremap <leader>xd <cmd>TroubleToggle lsp_document_diagnostics<cr>
 nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
 nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
 nnoremap gR <cmd>TroubleToggle lsp_references<cr>
+
+nmap <Leader>hs <Plug>GitGutterStageHunk
+nmap <Leader>hr <Plug>GitGutterRevertHunk
+nmap <Leader>hp <Plug>GitGutterPreviewHunk
