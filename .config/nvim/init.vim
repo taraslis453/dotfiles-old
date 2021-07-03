@@ -4,8 +4,9 @@ call plug#begin(stdpath('data') . 'vimplug')
     Plug 'kabouzeid/nvim-lspinstall'
     Plug 'glepnir/lspsaga.nvim'
     Plug 'hrsh7th/nvim-compe'
+    " Plug 'L3MON4D3/LuaSnip' 
+    Plug 'rafamadriz/friendly-snippets'
     Plug 'hrsh7th/vim-vsnip'
-
     " customization theming
     Plug 'mhinz/vim-startify'
     Plug 'kyazdani42/nvim-web-devicons'  " needed for galaxyline icons
@@ -18,14 +19,12 @@ call plug#begin(stdpath('data') . 'vimplug')
     " syntax
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     Plug 'nvim-treesitter/nvim-treesitter-textobjects'
-    " Plug 'morhetz/gruvbox'
     Plug 'sainnhe/gruvbox-material'
     Plug 'ap/vim-css-color'
 
     " text editing, motions
-    Plug 'https://github.com/easymotion/vim-easymotion.git'
+    Plug 'phaazon/hop.nvim'
     Plug 'unblevable/quick-scope'
-    Plug 'justinmk/vim-sneak'
     Plug 'preservim/nerdcommenter'
     Plug 'tpope/vim-surround'
     Plug 'alvan/vim-closetag'
@@ -33,12 +32,13 @@ call plug#begin(stdpath('data') . 'vimplug')
     Plug 'andymass/vim-matchup'
     Plug 'psliwka/vim-smoothie'
     Plug 'cohama/lexima.vim'
+    Plug 'chaoren/vim-wordmotion'
     "prettier
     Plug 'sbdchd/neoformat'
 
     " git 
-    Plug 'airblade/vim-gitgutter'
-    Plug 'tpope/vim-fugitive'
+    Plug 'lewis6991/gitsigns.nvim'   
+    Plug 'sindrets/diffview.nvim'
 
     " file navigation
     Plug 'kyazdani42/nvim-tree.lua'
@@ -52,7 +52,6 @@ call plug#begin(stdpath('data') . 'vimplug')
     Plug 'simeji/winresizer'
     Plug 'rmagatti/auto-session'
     Plug 'numToStr/FTerm.nvim'
-
     " etc
     Plug 'wakatime/vim-wakatime'
     Plug 'tpope/vim-repeat'
@@ -110,32 +109,11 @@ set clipboard+=unnamedplus
 " insert blank line shift enter before current line enter 
 nmap <CR> o<Esc>
 
-"easymotion
-" easy motion on one leader trigger
-map <Leader> <Plug>(easymotion-prefix)
-
 " quick scope
 " Trigger a highlight in the appropriate direction when pressing these keys:
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 highlight QuickScopePrimary guifg='#00C7DF' gui=underline ctermfg=155 cterm=underline
 highlight QuickScopeSecondary guifg='#afff5f' gui=underline ctermfg=81 cterm=underline
-
-"vim-sneak
-highlight Sneak guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
-highlight SneakScope guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
-hi! link Sneak Search
-let g:sneak#label = 1
-
-" case insensitive sneak
-let g:sneak#use_ic_scs = 1
-" immediately move to the next instance of search, if you move the cursor sneak is back to default behavior
-let g:sneak#s_next = 1
-
-map gS <Plug>Sneak_,
-map gs <Plug>Sneak_;
-" Cool prompts
- let g:sneak#prompt = '🕵'
- let g:sneak#prompt = '🔎'
 
 nnoremap \ :noh<return>
 " Clear cmd line message
@@ -173,6 +151,7 @@ nnoremap <Leader>f :lua require'telescope.builtin'.git_files{}<CR>
 nnoremap <Leader>cs :lua require'telescope.builtin'.colorscheme{}<CR>
 
 nnoremap <space>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>
+nnoremap <space>gs :lua require('telescope.builtin').git_status()<CR>
 nnoremap <space>ff <cmd>Telescope find_files<Cr>
 nnoremap <space>fg <cmd>Telescope live_grep<Cr>
 nnoremap <space>fb <cmd>Telescope buffers<Cr>
@@ -278,44 +257,87 @@ let NERDSpaceDelims=1
 let g:nvim_tree_auto_open = 1
 let g:nvim_tree_lsp_diagnostics = 1
 let g:nvim_tree_hide_dotfiles = 1
+let g:nvim_tree_update_cwd = 1 
+let g:nvim_tree_highlight_opened_files = 1
+let g:nvim_tree_git_hl = 1
+let g:nvim_tree_follow = 1
 lua <<EOF
-    local tree_cb = require'nvim-tree.config'.nvim_tree_callback
+local tree_cb = require'nvim-tree.config'.nvim_tree_callback
+    -- default mappings
     vim.g.nvim_tree_bindings = {
-      ["<CR>"] = ":YourVimFunction()<cr>",
-      ["u"] = ":lua require'some_module'.some_function()<cr>",
-
-      -- default mappings
-      ["<CR>"]           = tree_cb("edit"),
-      ["o"]              = tree_cb("edit"),
-      ["<2-LeftMouse>"]  = tree_cb("edit"),
-      ["<2-RightMouse>"] = tree_cb("cd"),
-      ["l"]          = tree_cb("cd"),
-      ["s"]          = tree_cb("vsplit"),
-      ["i"]          = tree_cb("split"),
-      ["t"]          = tree_cb("tabnew"),
-      ["<"]              = tree_cb("prev_sibling"),
-      [">"]              = tree_cb("next_sibling"),
-      ["<BS>"]           = tree_cb("close_node"),
-      ["<S-CR>"]         = tree_cb("close_node"),
-      ["<Tab>"]          = tree_cb("preview"),
-      ["I"]              = tree_cb("toggle_ignored"),
-      ["H"]              = tree_cb("toggle_dotfiles"),
-      ["R"]              = tree_cb("refresh"),
-      ["a"]              = tree_cb("create"),
-      ["d"]              = tree_cb("remove"),
-      ["r"]              = tree_cb("rename"),
-      ["<C-r>"]          = tree_cb("full_rename"),
-      ["x"]              = tree_cb("cut"),
-      ["c"]              = tree_cb("copy"),
-      ["p"]              = tree_cb("paste"),
-      ["y"]              = tree_cb("copy_name"),
-      ["Y"]              = tree_cb("copy_path"),
-      ["gy"]             = tree_cb("copy_absolute_path"),
-      ["[g"]             = tree_cb("prev_git_item"),
-      ["]g"]             = tree_cb("next_git_item"),
-      ["-"]              = tree_cb("dir_up"),
-      ["q"]              = tree_cb("close"),
+      { key = {"<CR>", "o", "<2-LeftMouse>"}, cb = tree_cb("edit") },
+      { key = {"<2-RightMouse>", "<C-]>"},    cb = tree_cb("cd") },
+      { key = "s",                        cb = tree_cb("vsplit") },
+      { key = "i",                        cb = tree_cb("split") },
+      { key = "t",                        cb = tree_cb("tabnew") },
+      { key = "<",                            cb = tree_cb("prev_sibling") },
+      { key = ">",                            cb = tree_cb("next_sibling") },
+      { key = "P",                            cb = tree_cb("parent_node") },
+      { key = "<BS>",                         cb = tree_cb("close_node") },
+      { key = "<S-CR>",                       cb = tree_cb("close_node") },
+      { key = "<Tab>",                        cb = tree_cb("preview") },
+      { key = "K",                            cb = tree_cb("first_sibling") },
+      { key = "J",                            cb = tree_cb("last_sibling") },
+      { key = "I",                            cb = tree_cb("toggle_ignored") },
+      { key = "H",                            cb = tree_cb("toggle_dotfiles") },
+      { key = "R",                            cb = tree_cb("refresh") },
+      { key = "a",                            cb = tree_cb("create") },
+      { key = "d",                            cb = tree_cb("remove") },
+      { key = "r",                            cb = tree_cb("rename") },
+      { key = "<C-r>",                        cb = tree_cb("full_rename") },
+      { key = "x",                            cb = tree_cb("cut") },
+      { key = "c",                            cb = tree_cb("copy") },
+      { key = "p",                            cb = tree_cb("paste") },
+      { key = "y",                            cb = tree_cb("copy_name") },
+      { key = "Y",                            cb = tree_cb("copy_path") },
+      { key = "gy",                           cb = tree_cb("copy_absolute_path") },
+      { key = "[g",                           cb = tree_cb("prev_git_item") },
+      { key = "]g",                           cb = tree_cb("next_git_item") },
+      { key = "-",                            cb = tree_cb("dir_up") },
+      { key = "q",                            cb = tree_cb("close") },
+      { key = "g?",                           cb = tree_cb("toggle_help") },
     }
+    require'hop'.setup()
+
+    vim.api.nvim_set_keymap('n', 's', ":HopChar2<cr>", {silent = true})
+    vim.api.nvim_set_keymap('n', 'S', ":HopWord<cr>", {silent = true})
+    require('gitsigns').setup()
+    local cb = require'diffview.config'.diffview_callback
+    require'diffview'.setup {
+      diff_binaries = false,    -- Show diffs for binaries
+      file_panel = {
+        width = 35,
+        use_icons = true        -- Requires nvim-web-devicons
+      },
+      key_bindings = {
+        disable_defaults = false,                   -- Disable the default key bindings
+        -- The `view` bindings are active in the diff buffers, only when the current
+        -- tabpage is a Diffview.
+        view = {
+          ["<tab>"]     = cb("select_next_entry"),  -- Open the diff for the next file 
+          ["<s-tab>"]   = cb("select_prev_entry"),  -- Open the diff for the previous file
+          ["<leader>e"] = cb("focus_files"),        -- Bring focus to the files panel
+          ["<leader>b"] = cb("toggle_files"),       -- Toggle the files panel.
+        },
+        file_panel = {
+          ["j"]             = cb("next_entry"),         -- Bring the cursor to the next file entry
+          ["<down>"]        = cb("next_entry"),
+          ["k"]             = cb("prev_entry"),         -- Bring the cursor to the previous file entry.
+          ["<up>"]          = cb("prev_entry"),
+          ["<cr>"]          = cb("select_entry"),       -- Open the diff for the selected entry.
+          ["o"]             = cb("select_entry"),
+          ["<2-LeftMouse>"] = cb("select_entry"),
+          ["-"]             = cb("toggle_stage_entry"), -- Stage / unstage the selected entry.
+          ["S"]             = cb("stage_all"),          -- Stage all entries.
+          ["U"]             = cb("unstage_all"),        -- Unstage all entries.
+          ["R"]             = cb("refresh_files"),      -- Update stats and entries in the file list.
+          ["<tab>"]         = cb("select_next_entry"),
+          ["<s-tab>"]       = cb("select_prev_entry"),
+          ["<leader>e"]     = cb("focus_files"),
+          ["<leader>b"]     = cb("toggle_files"),
+        }
+      }
+}
 EOF
 nnoremap <C-v> :NvimTreeToggle<CR>
 nnoremap <C-n> :NvimTreeFindFile<CR>
@@ -328,6 +350,26 @@ nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
 nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
 nnoremap gR <cmd>TroubleToggle lsp_references<cr>
 
-nmap <Leader>hs <Plug>GitGutterStageHunk
-nmap <Leader>hr <Plug>GitGutterRevertHunk
-nmap <Leader>hp <Plug>GitGutterPreviewHunk
+let g:wordmotion_nomap = 1
+nmap w          <Plug>WordMotion_w
+nmap b          <Plug>WordMotion_b
+nmap gE         <Plug>WordMotion_gE
+omap aW         <Plug>WordMotion_aW
+cmap <C-R><C-W> <Plug>WordMotion_<C-R><C-W>
+
+nnoremap <leader>do <cmd>DiffviewOpen<cr>
+nnoremap <leader>dc <cmd>DiffviewClose<cr>
+
+" Expand
+imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+
+" Expand or jump
+imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+
+" " Jump forward or backward
+" imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+" smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+" imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+" smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
