@@ -52,6 +52,7 @@ call plug#begin(stdpath('data') . 'vimplug')
     Plug 'simeji/winresizer'
     Plug 'rmagatti/auto-session'
     Plug 'numToStr/FTerm.nvim'
+    Plug 'dosimple/workspace.vim'
     " etc
     Plug 'wakatime/vim-wakatime'
     Plug 'tpope/vim-repeat'
@@ -145,7 +146,7 @@ nnoremap <Leader>/ :lua require'telescope.builtin'.current_buffer_fuzzy_find{}<C
 nnoremap <Leader>' :lua require'telescope.builtin'.marks{}<CR>
 
 " git files
-nnoremap <Leader>f :lua require'telescope.builtin'.git_files{}<CR>
+nnoremap <Leader>gf :lua require'telescope.builtin'.git_files{}<CR>
 
 " pick color scheme
 nnoremap <Leader>cs :lua require'telescope.builtin'.colorscheme{}<CR>
@@ -260,7 +261,8 @@ let g:nvim_tree_hide_dotfiles = 1
 let g:nvim_tree_update_cwd = 1 
 let g:nvim_tree_highlight_opened_files = 1
 let g:nvim_tree_git_hl = 1
-let g:nvim_tree_follow = 1
+let g:nvim_tree_width = 50
+" let g:nvim_tree_follow = 1
 lua <<EOF
 local tree_cb = require'nvim-tree.config'.nvim_tree_callback
     -- default mappings
@@ -373,3 +375,31 @@ smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l
 " smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
 " imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 " smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+map <silent> <M-1> :WS 1<CR>
+map <silent> <M-2> :WS 2<CR>
+map <silent> <M-3> :WS 3<CR>
+map <silent> <M-4> :WS 4<CR>
+map <silent> <M-5> :WS 5<CR>
+map <silent> <M-6> :WS 6<CR>
+map <silent> <M-7> :WS 7<CR>
+map <silent> <M-8> :WS 8<CR>
+map <silent> <M-9> :WS 9<CR>
+map <silent> <M-0> :WS 10<CR>
+imap <M-1> <C-O><M-1>
+imap <M-2> <C-O><M-2>
+imap <M-3> <C-O><M-3>
+imap <M-4> <C-O><M-4>
+imap <M-5> <C-O><M-5>
+imap <M-6> <C-O><M-6>
+imap <M-7> <C-O><M-7>
+imap <M-8> <C-O><M-8>
+imap <M-9> <C-O><M-9>
+imap <M-0> <C-O><M-0>
+
+" Alternate between current and previous workspaces
+map <silent> <M-`> :call WS_Backforth()<CR>
+imap <M-`> <C-O><M-`>
+
+" Show info line about workspaces
+map <silent> <F1> :echo WS_Line()<CR>
+imap <F1> <C-O><F1>

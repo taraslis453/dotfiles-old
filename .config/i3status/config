@@ -1,12 +1,13 @@
 general {
-        output_format = "i3bar"
-        colors = false
-        markup = pango
-        interval = 5
-        color_good = '#2f343f'
-        color_degraded = '#ebcb8b'
-        color_bad = '#ba5e57'
+  output_format = "i3bar"
+  colors = true
+  interval = 5
+  markup = pango
+  color_good = "#50FA7B"
+  color_degraded = "#F1FA8C"
+  color_bad = "#FF5555"
 }
+
 order += "memory"
 order += "cpu_temperature 0"
 order += "disk /"
@@ -16,27 +17,27 @@ order += "tztime local"
 
 memory {
       memory_used_method = classical
-      format = "<span background='#b3555e'>%used | %available</span>"
+      format = "<span>%used | %available</span>"
       threshold_degraded = "1G"
       format_degraded = "MEMORY < %available"
 }
 
-cpu_temperature 0 {
-        format = "<span background='#bf616a'>  %degrees °C </span>"
-        path = "/sys/class/thermal/thermal_zone0/temp"
-}
+/* cpu_temperature 0 { */
+        /* format = "<span>  %degrees °C </span>" */
+        /* path = "/sys/class/thermal/thermal_zone0/temp" */
+/* } */
 
-disk "/" {
-        format = "<span background='#fec7cd'> / %free Free </span>"
-}
+/* disk "/" { */
+        /* format = "<span> / %free Free </span>" */
+/* } */
 
-disk "/home" {
-        format = "<span background='#a1d569'> /home %free Free </span>"
-}
+/* disk "/home" { */
+        /* format = "<span> /home %free Free </span>" */
+/* } */
 
 volume master {
-        format = "<span background='#ebcb8b'> 墳%volume </span>"
-        format_muted = "<span background='#ebcb8b'>  婢Muted </span>"
+        format = "<span> 墳 %volume </span>"
+        format_muted = "<span>  婢Muted </span>"
         device = "default"
         mixer = "Master"
         mixer_idx = 0
@@ -44,5 +45,5 @@ volume master {
 
 
 tztime local {
-		format = "<span background='#81a1c1'> %time </span>"
+		format = "<span background='#6272A4'> %time </span>"
 		format_time = " %a %-d %b %H:%M"

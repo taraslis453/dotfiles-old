@@ -202,30 +202,55 @@ set_from_resource $yellow color3
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 #
+# bar {
+    # colors {
+        # background $bg-color
+        # statusline $bg-color
+        # separator $black
+        # # colour of border, background, and text
+        # focused_workspace       $bg-color $red $fg-color
+        # active_workspace        $bg-color $bg-color $fg-color
+        # inactive_workspace      $bg-color $bg-color $fg-color
+       # urgent_workspace       $bg-color $yellow $bg-color
+      # }
+    # status_command i3status
+# }
+# # window colors
+# #                       border              background         text                 indicator
+# client.focused              $red $bg-color $fg-color $red $fg-color
+# client.focused_inactive     $bg-color $bg-color $fg-color $bg-color $bg-color
+# client.unfocused            $bg-color $bg-color $fg-color $bg-color $bg-color
+# client.urgent               $bg-color $bg-color $fg-color $bg-color $bg-color
+# client.placeholder          $bg-color $bg-color $fg-color $bg-color $bg-color
+# client.background           $bg-color
+
+# class                 border  bground text    indicator child_border
+client.focused          #6272A4 #6272A4 #F8F8F2 #6272A4   #6272A4
+client.focused_inactive #44475A #44475A #F8F8F2 #44475A   #44475A
+client.unfocused        #282A36 #282A36 #BFBFBF #282A36   #282A36
+client.urgent           #44475A #FF5555 #F8F8F2 #FF5555   #FF5555
+client.placeholder      #282A36 #282A36 #F8F8F2 #282A36   #282A36
+
+client.background       #F8F8F2
+
 bar {
-    colors {
-        background $bg-color
-        statusline $bg-color
-        separator $black
-        # colour of border, background, and text
-        focused_workspace       $bg-color $red $fg-color
-        active_workspace        $bg-color $bg-color $fg-color
-        inactive_workspace      $bg-color $bg-color $fg-color
-       urgent_workspace       $bg-color $yellow $bg-color
-      }
-    status_command i3status
+  colors {
+    background #282A36
+    statusline #F8F8F2
+    separator  #44475A
+
+    focused_workspace  #44475A #44475A #F8F8F2
+    active_workspace   #282A36 #44475A #F8F8F2
+    inactive_workspace #282A36 #282A36 #BFBFBF
+    urgent_workspace   #FF5555 #FF5555 #F8F8F2
+    binding_mode       #FF5555 #FF5555 #F8F8F2
+  }
+  status_command i3status
 }
-# window colors
-#                       border              background         text                 indicator
-client.focused              $red $bg-color $fg-color $red $fg-color
-client.focused_inactive     $bg-color $bg-color $fg-color $bg-color $bg-color
-client.unfocused            $bg-color $bg-color $fg-color $bg-color $bg-color
-client.urgent               $bg-color $bg-color $fg-color $bg-color $bg-color
-client.placeholder          $bg-color $bg-color $fg-color $bg-color $bg-color
-client.background           $bg-color
+
 # monitors setting
 exec_always xrandr --output LVDS-1-1 --mode 1366x768 --pos 0x113 --rotate normal --output VGA-1-1 --primary --mode 1680x1050 --pos 1366x0 --rotate normal --output HDMI-1-1 --off --output DP-1-1 --off && feh --bg-fill /home/taras/Downloads/wallpaper2.jpg 
-exec_always compton
+# exec_always compton
 assign [class="Firefox"] $ws3
 assign [class="Brave-browser"] $ws3
 assign [class="TelegramDesktop"] $ws9
