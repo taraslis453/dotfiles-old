@@ -19,19 +19,23 @@ call plug#begin(stdpath('data') . 'vimplug')
     " syntax
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+    Plug 'nvim-treesitter/playground'
     Plug 'sainnhe/gruvbox-material'
-    Plug 'ap/vim-css-color'
+    Plug 'norcalli/nvim-colorizer.lua'
 
     " text editing, motions
     Plug 'phaazon/hop.nvim'
     Plug 'unblevable/quick-scope'
-    Plug 'preservim/nerdcommenter'
+    Plug 'JoosepAlviste/nvim-ts-context-commentstring'
+    Plug 'tpope/vim-commentary'
+
+
     Plug 'tpope/vim-surround'
-    Plug 'alvan/vim-closetag'
+    Plug 'windwp/nvim-ts-autotag'
     Plug 'AndrewRadev/tagalong.vim'
     Plug 'andymass/vim-matchup'
     Plug 'psliwka/vim-smoothie'
-    Plug 'cohama/lexima.vim'
+    Plug 'windwp/nvim-autopairs'
     Plug 'chaoren/vim-wordmotion'
     "prettier
     Plug 'sbdchd/neoformat'
@@ -43,6 +47,7 @@ call plug#begin(stdpath('data') . 'vimplug')
     " file navigation
     Plug 'kyazdani42/nvim-tree.lua'
     Plug 'nvim-telescope/telescope.nvim'
+    Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-lua/popup.nvim'  
     Plug 'folke/todo-comments.nvim'
@@ -59,9 +64,7 @@ call plug#begin(stdpath('data') . 'vimplug')
     Plug 'liuchengxu/vim-which-key'
 call plug#end()
 " TODO snippets, quickfix
-source $HOME/.config/nvim/plug-config/vim-closetag.vim
 source $HOME/.config/nvim/plug-config/barbar.vim
-
 set number " number of line
 set hidden
 set tabstop=2
@@ -186,6 +189,7 @@ lua <<EOF
   require("treesitter")
   require("statusbar")
   require("completion")
+  require('autopairs')
   require("_telescope")
 EOF
 
@@ -195,6 +199,7 @@ lua << EOF
     -- or leave it empty to use the default settings
     -- refer to the configuration section below
   }
+
   require("trouble").setup{}
   require'FTerm'.setup({
       dimensions  = {
@@ -236,7 +241,6 @@ map('n', '<A-l>', '<CMD>lua _G.__fterm_lazygit()<CR>', opts)
 
 
 EOF
-
 lua << EOF
 local opts = {
   log_level = 'info',
@@ -249,12 +253,21 @@ local opts = {
 }
 
 require('auto-session').setup(opts)
+require('nvim-autopairs').setup()
+require 'colorizer'.setup()
+local status_ok, colorizer = pcall(require, "colorizer")
+colorizer.setup({ "*" }, {
+  RGB = true, -- #RGB hex codes
+  RRGGBB = true, -- #RRGGBB hex codes
+  RRGGBBAA = true, -- #RRGGBBAA hex codes
+  rgb_fn = true, -- CSS rgb() and rgba() functions
+  hsl_fn = true, -- CSS hsl() and hsla() functions
+  css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
+  css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
+  namess = true, -- "Name" codes like Blue
+})
 EOF
-let g:NERDCustomDelimiters={
-	\ 'javascript': { 'left': '//', 'right': '', 'leftAlt': '{/*', 'rightAlt': '*/}' },
-\}
 
-let NERDSpaceDelims=1
 let g:nvim_tree_auto_open = 1
 let g:nvim_tree_lsp_diagnostics = 1
 let g:nvim_tree_hide_dotfiles = 1
@@ -341,6 +354,7 @@ local tree_cb = require'nvim-tree.config'.nvim_tree_callback
       }
 }
 EOF
+
 nnoremap <C-v> :NvimTreeToggle<CR>
 nnoremap <C-n> :NvimTreeFindFile<CR>
 nnoremap <leader>r :NvimTreeRefresh<CR>

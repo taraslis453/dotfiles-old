@@ -1,9 +1,23 @@
 require'nvim-treesitter.configs'.setup {
     -- ensure_installed can be "all" or a list of languages { "python", "javascript" }
-    ensure_installed = { "javascript" },
+    ensure_installed = { "javascript", 'tsx', 'html' },
     highlight = { -- enable highlighting for all file types
       enable = true, -- you can also use a table with list of langs here (e.g. { "python", "javascript" })
     },
+    autotag = {
+        enable = true,
+    },
+    context_commentstring = {
+      enable = true,
+    },
+    indent = {
+      enable = true,
+    },
+    matchup = {
+      enable = true,
+    },
+    autopairs = {enable = true},
+
     incremental_selection = {
       enable = true,  -- you can also use a table with list of langs here (e.g. { "python", "javascript" })
       keymaps = {                       -- mappings for incremental selection (visual mappings)
@@ -19,7 +33,7 @@ require'nvim-treesitter.configs'.setup {
         enable = true,  -- you can also use a table with list of langs here (e.g. { "python", "javascript" })
         keymaps = {
           -- You can use the capture groups defined here:
-	  -- https://github.com/nvim-treesitter/nvim-treesitter-textobjects/blob/master/queries/c/textobjects.scm
+    -- https://github.com/nvim-treesitter/nvim-treesitter-textobjects/blob/master/queries/c/textobjects.scm
           ["af"] = "@function.outer",
           ["if"] = "@function.inner",
           ["ab"] = "@block.outer",
