@@ -99,8 +99,8 @@ bindsym $mod+space floating toggle
 bindsym $mod+Shift+space focus mode_toggle
 
 # focus the parent container
-bindsym $mod+a focus parent
-
+# bindsym $mod+a focus parent
+bindsym $mod+a exec bash ~/toggle_en_ru_ua.sh
 # focus the child container
 #bindsym $mod+d focus child
 
@@ -115,7 +115,7 @@ set $ws6 "6"
 set $ws7 "7"
 set $ws8 "8: Terminals "
 set $ws9 "9: Messengers "
-set $ws10 "10: Music ﱘ"
+set $ws10 "10: ETC "
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1

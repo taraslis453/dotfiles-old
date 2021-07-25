@@ -20,6 +20,7 @@ call plug#begin(stdpath('data') . 'vimplug')
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     Plug 'nvim-treesitter/nvim-treesitter-textobjects'
     Plug 'nvim-treesitter/playground'
+    Plug 'RRethy/nvim-treesitter-textsubjects'
     Plug 'sainnhe/gruvbox-material'
     Plug 'norcalli/nvim-colorizer.lua'
 
@@ -36,7 +37,7 @@ call plug#begin(stdpath('data') . 'vimplug')
     Plug 'andymass/vim-matchup'
     Plug 'psliwka/vim-smoothie'
     Plug 'windwp/nvim-autopairs'
-    Plug 'chaoren/vim-wordmotion'
+    " Plug 'chaoren/vim-wordmotion'
     "prettier
     Plug 'sbdchd/neoformat'
 
@@ -366,12 +367,12 @@ nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
 nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
 nnoremap gR <cmd>TroubleToggle lsp_references<cr>
 
-let g:wordmotion_nomap = 1
-nmap w          <Plug>WordMotion_w
-nmap b          <Plug>WordMotion_b
-nmap gE         <Plug>WordMotion_gE
-omap aW         <Plug>WordMotion_aW
-cmap <C-R><C-W> <Plug>WordMotion_<C-R><C-W>
+" let g:wordmotion_nomap = 1
+" nmap w          <Plug>WordMotion_w
+" nmap b          <Plug>WordMotion_b
+" nmap gE         <Plug>WordMotion_gE
+" omap aW         <Plug>WordMotion_aW
+" cmap <C-R><C-W> <Plug>WordMotion_<C-R><C-W>
 
 nnoremap <leader>do <cmd>DiffviewOpen<cr>
 nnoremap <leader>dc <cmd>DiffviewClose<cr>
